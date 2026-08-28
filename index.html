@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Molly's</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 100%);
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* Breathing white glow effect */
+        .glow-container {
+            position: relative;
+            padding: 15px;
+            border-radius: 20px;
+            background: transparent;
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% {
+                box-shadow: 
+                    0 0 40px rgba(255, 255, 255, 0.1),
+                    0 0 80px rgba(255, 255, 255, 0.05),
+                    inset 0 0 40px rgba(255, 255, 255, 0.05);
+            }
+            50% {
+                box-shadow: 
+                    0 0 80px rgba(255, 255, 255, 0.25),
+                    0 0 150px rgba(255, 255, 255, 0.1),
+                    inset 0 0 80px rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        /* Magnet hover effect container */
+        .video-wrapper {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+            transform: scale(1);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .video-wrapper:hover {
+            transform: scale(1.05);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+        }
+
+        /* Bouncy magnet effect on hover */
+        .video-wrapper.magnet:hover {
+            animation: magnetBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes magnetBounce {
+            0% {
+                transform: scale(1.05) translateX(0) translateY(0);
+            }
+            25% {
+                transform: scale(1.08) translateX(-10px) translateY(-5px);
+            }
+            50% {
+                transform: scale(1.1) translateX(10px) translateY(-3px);
+            }
+            75% {
+                transform: scale(1.07) translateX(-5px) translateY(2px);
+            }
+            100% {
+                transform: scale(1.05) translateX(0) translateY(0);
+            }
+        }
+
+        video {
+            display: block;
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 16px;
+            background: #000;
+            cursor: pointer;
+        }
+
+        /* Title overlay - hidden initially, shows after video ends */
+        .title-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 1s ease-in-out;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .title-overlay.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .title-content {
+            text-align: center;
+            animation: titleReveal 1.5s ease-out;
+        }
+
+        @keyframes titleReveal {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+                filter: blur(10px);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        .title-content h1 {
+            font-size: clamp(4rem, 15vw, 10rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 50%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 80px rgba(255, 255, 255, 0.3);
+            letter-spacing: 10px;
+            position: relative;
+        }
+
+        .title-content h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+            border-radius: 2px;
+            animation: linePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes linePulse {
+            0%, 100% {
+                width: 60%;
+                opacity: 0.5;
+            }
+            50% {
+                width: 80%;
+                opacity: 1;
+            }
+        }
+
+        .title-content .sub-title {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            margin-top: 20px;
+            letter-spacing: 5px;
+            font-weight: 300;
+        }
+
+        /* Replay button */
+        .replay-btn {
+            margin-top: 40px;
+            padding: 15px 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            letter-spacing: 2px;
+        }
+
+        .replay-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Loading state while video loads */
+        .video-wrapper .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.2rem;
+            opacity: 0.5;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .glow-container {
+                padding: 10px;
+            }
+            
+            .video-wrapper:hover {
+                transform: scale(1.02);
+            }
+            
+            .title-content h1 {
+                letter-spacing: 5px;
+            }
+        }
+
+        /* Optional: Progress bar custom styling */
+        video::-webkit-media-controls-timeline {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        video::-webkit-media-controls-timeline:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Breathing Glow Container -->
+    <div class="glow-container">
+        <!-- Video with Magnet Effect -->
+        <div class="video-wrapper magnet" id="videoWrapper">
+            <video id="mainVideo" playsinline>
+                <source src="videos/video.mp4" type="video/mp4">
+                <source src="videos/video.webm" type="video/webm">
+                Your browser doesn't support HTML5 video.
+            </video>
+        </div>
+    </div>
+
+    <!-- Title Overlay -->
+    <div class="title-overlay" id="titleOverlay">
+        <div class="title-content">
+            <h1>MOLLY'S</h1>
+            <p class="sub-title">✦ watch again ✦</p>
+            <button class="replay-btn" onclick="replayVideo()">▶ Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Get elements
+        const video = document.getElementById('mainVideo');
+        const titleOverlay = document.getElementById('titleOverlay');
+        const videoWrapper = document.getElementById('videoWrapper');
+
+        // Show title when video ends
+        video.addEventListener('ended', function() {
+            titleOverlay.classList.add('show');
+            // Remove magnet effect when video ends
+            videoWrapper.classList.remove('magnet');
+        });
+
+        // Replay video function
+        function replayVideo() {
+            video.currentTime = 0;
+            video.play();
+            titleOverlay.classList.remove('show');
+            // Re-add magnet effect
+            videoWrapper.classList.add('magnet');
+        }
+
+        // Click on video to play/pause
+        video.addEventListener('click', function() {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        });
+
+        // Auto-play when page loads (muted by default, user interaction required)
+        document.addEventListener('click', function initPlay() {
+            if (video.paused) {
+                video.play().catch(() => {
+                    // User interaction required for autoplay
+                    console.log('Click to play video');
+                });
+            }
+            // Remove listener after first click
+            document.removeEventListener('click', initPlay);
+        });
+
+        // Handle video loading errors
+        video.addEventListener('error', function(e) {
+            console.log('Video loading error:', e);
+            // You can show a fallback message here
+        });
+
+        // Optional: Show video duration when loaded
+        video.addEventListener('loadedmetadata', function() {
+            console.log('Video duration:', video.duration, 'seconds');
+        });
+
+        // Keyboard shortcut: Space to play/pause
+        document.addEventListener('keydown', function(e) {
+            if (e.key === ' ' && !titleOverlay.classList.contains('show')) {
+                e.preventDefault();
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+            }
+            // Escape to close title if showing
+            if (e.key === 'Escape' && titleOverlay.classList.contains('show')) {
+                replayVideo();
+            }
+        });
+
+        // Optional: Prevent video from going to sleep mode
+        // (helps with mobile devices)
+        video.setAttribute('playsinline', '');
+    </script>
+</body>
+</html>
