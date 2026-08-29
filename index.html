@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Molly's - Music Channel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,7 +13,7 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -32,6 +33,7 @@
             height: 100%;
             z-index: 0;
             background: radial-gradient(ellipse at center, #0a0a2a 0%, #050510 50%, #020208 100%);
+            transition: opacity 1.5s ease;
         }
 
         /* ===== STARS ===== */
@@ -133,6 +135,7 @@
             background: transparent;
             animation: breathe 4.5s ease-in-out infinite;
             width: 100%;
+            transition: all 0.5s ease;
         }
 
         @keyframes breathe {
@@ -241,8 +244,8 @@
             border-radius: 10px;
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.05);
-            font-family: 'Arial', sans-serif;
-            letter-spacing: 0.5px;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
             opacity: 0;
             transition: opacity 0.3s ease;
             user-select: none;
@@ -276,6 +279,38 @@
             pointer-events: auto;
         }
 
+        /* ===== MOLLY PNG FADING BACKGROUND ===== */
+        .molly-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
+            opacity: 0;
+            z-index: 0;
+            pointer-events: none;
+            transition: opacity 2s ease;
+            filter: blur(2px);
+        }
+
+        .title-overlay.show .molly-bg {
+            opacity: 0.08;
+            animation: fadeInOut 4s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% {
+                opacity: 0.04;
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+            50% {
+                opacity: 0.12;
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+
         .title-content {
             text-align: center;
             animation: titleReveal 2s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -283,44 +318,57 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 50px;
+            gap: 45px;
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes titleReveal {
             0% {
-                transform: scale(0.3) rotate(-5deg);
+                transform: scale(0.3) rotate(-5deg) skewX(10deg);
                 opacity: 0;
                 filter: blur(30px);
             }
             100% {
-                transform: scale(1) rotate(0deg);
+                transform: scale(1) rotate(0deg) skewX(0deg);
                 opacity: 1;
                 filter: blur(0);
             }
         }
 
+        /* ===== MOLLY'S TITLE ===== */
         .title-content h1 {
-            font-size: clamp(5rem, 20vw, 13rem);
+            font-family: 'Playfair Display', serif;
             font-weight: 900;
-            font-family: 'Georgia', serif;
+            font-size: clamp(3.5rem, 12vw, 7rem);
+            letter-spacing: 15px;
+            position: relative;
             background: linear-gradient(135deg, 
                 #ffffff 0%, 
-                #e8e0d5 20%,
-                #ffffff 40%,
-                #e8e0d5 60%,
-                #ffffff 80%,
-                #e8e0d5 100%
+                #f0e8d8 15%,
+                #ffffff 30%,
+                #f0e8d8 45%,
+                #ffffff 60%,
+                #f0e8d8 75%,
+                #ffffff 90%,
+                #f0e8d8 100%
             );
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: 20px;
-            position: relative;
-            animation: shimmer 4s ease-in-out infinite;
+            animation: shimmerText 4s ease-in-out infinite;
+            text-shadow: none;
+            line-height: 1.1;
+            transition: all 0.3s ease;
         }
 
-        @keyframes shimmer {
+        .title-content h1:hover {
+            transform: scale(1.02);
+            letter-spacing: 20px;
+        }
+
+        @keyframes shimmerText {
             0%, 100% {
                 background-position: 0% 50%;
             }
@@ -332,14 +380,20 @@
         .title-content h1::after {
             content: '';
             position: absolute;
-            bottom: -20px;
+            bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 30%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            width: 40%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             border-radius: 2px;
             animation: linePulse 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .title-content h1:hover::after {
+            width: 60%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
         }
 
         @keyframes linePulse {
@@ -353,28 +407,29 @@
             }
         }
 
-        /* ===== TELEGRAM BUTTON ===== */
-        .telegram-btn {
+        /* ===== MUSIC CHANNEL BUTTON - INTERACTIVE GRADIENT ===== */
+        .music-btn {
             display: inline-flex;
             align-items: center;
-            gap: 15px;
-            padding: 18px 45px;
-            background: linear-gradient(135deg, #0088cc, #004d7a, #003366);
-            background-size: 200% 200%;
+            gap: 18px;
+            padding: 16px 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 300% 300%;
             color: white;
             border: none;
-            border-radius: 50px;
-            font-size: 1.3rem;
-            font-weight: 600;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-family: 'Rajdhani', sans-serif;
             cursor: pointer;
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             text-decoration: none;
-            font-family: 'Arial', sans-serif;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 30px rgba(0, 136, 204, 0.3);
-            animation: gradientMove 3s ease-in-out infinite;
+            box-shadow: 0 5px 30px rgba(118, 75, 162, 0.4);
+            animation: gradientMove 3s ease-in-out infinite, floatBtn 3s ease-in-out infinite;
         }
 
         @keyframes gradientMove {
@@ -386,7 +441,16 @@
             }
         }
 
-        .telegram-btn::before {
+        @keyframes floatBtn {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .music-btn::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -398,118 +462,39 @@
             transition: opacity 0.5s ease;
         }
 
-        .telegram-btn:hover {
-            transform: scale(1.08) translateY(-3px);
-            box-shadow: 0 10px 50px rgba(0, 136, 204, 0.5);
+        /* Hover effects - interactive gradient changes */
+        .music-btn:hover {
+            transform: translateY(-12px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(118, 75, 162, 0.6);
+            background: linear-gradient(135deg, #f093fb 0%, #667eea 50%, #764ba2 100%);
+            background-size: 300% 300%;
+            animation: gradientMove 1.5s ease-in-out infinite, floatBtn 2s ease-in-out infinite;
         }
 
-        .telegram-btn:hover::before {
+        .music-btn:hover::before {
             opacity: 1;
         }
 
-        .telegram-btn:active {
-            transform: scale(0.95);
+        .music-btn:active {
+            transform: scale(0.95) translateY(0px);
         }
 
-        .telegram-btn svg {
+        .music-btn svg {
             width: 32px;
             height: 32px;
             fill: white;
             flex-shrink: 0;
-            transition: transform 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .telegram-btn:hover svg {
-            transform: rotate(-10deg) scale(1.1);
+        .music-btn:hover svg {
+            transform: rotate(-15deg) scale(1.2);
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
         }
 
-        .telegram-btn span {
+        .music-btn span {
             position: relative;
             z-index: 1;
-        }
-
-        /* ===== COIN SECTION IN TITLE ===== */
-        .coin-section-title {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-top: -20px;
-        }
-
-        .coin-counter-title {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1rem;
-            font-weight: 300;
-            letter-spacing: 2px;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .coin-counter-title span {
-            color: #ffd700;
-            font-weight: 700;
-            font-size: 1.3rem;
-        }
-
-        .coin-wrapper-title {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 
-                0 0 20px rgba(255, 255, 255, 0.05),
-                0 0 40px rgba(255, 255, 255, 0.02),
-                inset 0 -5px 15px rgba(0,0,0,0.5);
-        }
-
-        .coin-wrapper-title:hover {
-            transform: scale(1.08) rotate(5deg);
-            box-shadow: 
-                0 0 30px rgba(255, 255, 255, 0.1),
-                0 0 60px rgba(255, 255, 255, 0.05),
-                inset 0 -5px 15px rgba(0,0,0,0.5);
-        }
-
-        .coin-wrapper-title:active {
-            transform: scale(0.9) rotate(-5deg);
-        }
-
-        .coin-wrapper-title img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.3s ease;
-        }
-
-        .coin-wrapper-title:hover img {
-            transform: scale(1.02);
-        }
-
-        /* Click effect for coin in title */
-        .coin-click-effect {
-            position: fixed;
-            pointer-events: none;
-            z-index: 2000;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ffd700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            animation: coinFloat 1s ease-out forwards;
-        }
-
-        @keyframes coinFloat {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) scale(1.5);
-            }
         }
 
         /* ===== VERSION TEXT ===== */
@@ -519,12 +504,17 @@
             left: 25px;
             z-index: 50;
             color: rgba(255, 255, 255, 0.2);
-            font-size: 0.7rem;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 1px;
+            font-size: 0.65rem;
+            font-family: 'Rajdhani', sans-serif;
             font-weight: 300;
+            letter-spacing: 2px;
             pointer-events: none;
             user-select: none;
+            transition: color 0.3s ease;
+        }
+
+        .version-text:hover {
+            color: rgba(255, 255, 255, 0.4);
         }
 
         /* ===== RESPONSIVE ===== */
@@ -548,31 +538,27 @@
 
             .title-content h1 {
                 letter-spacing: 10px;
-                font-size: clamp(3.5rem, 15vw, 6rem);
+                font-size: clamp(3rem, 12vw, 5rem);
             }
 
             .title-content {
                 gap: 35px;
             }
 
-            .telegram-btn {
+            .music-btn {
                 padding: 14px 30px;
                 font-size: 1rem;
-                gap: 10px;
+                gap: 12px;
             }
 
-            .telegram-btn svg {
+            .music-btn svg {
                 width: 24px;
                 height: 24px;
             }
 
-            .coin-wrapper-title {
-                width: 70px;
-                height: 70px;
-            }
-
-            .coin-counter-title {
-                font-size: 0.9rem;
+            .molly-bg {
+                width: 80%;
+                height: 80%;
             }
         }
 
@@ -587,37 +573,34 @@
             
             .title-content h1 {
                 letter-spacing: 5px;
-                font-size: clamp(2.5rem, 12vw, 4rem);
+                font-size: clamp(2.5rem, 10vw, 3.5rem);
             }
 
             .title-content {
                 gap: 25px;
             }
 
-            .telegram-btn {
+            .music-btn {
                 padding: 12px 25px;
-                font-size: 0.9rem;
+                font-size: 0.85rem;
                 gap: 8px;
             }
 
-            .telegram-btn svg {
+            .music-btn svg {
                 width: 20px;
                 height: 20px;
             }
 
-            .coin-wrapper-title {
-                width: 60px;
-                height: 60px;
-            }
-
-            .coin-counter-title {
-                font-size: 0.8rem;
-            }
-
             .version-text {
-                font-size: 0.6rem;
+                font-size: 0.5rem;
                 bottom: 15px;
                 left: 15px;
+                letter-spacing: 1px;
+            }
+
+            .molly-bg {
+                width: 90%;
+                height: 90%;
             }
         }
 
@@ -638,7 +621,7 @@
 </head>
 <body>
     <!-- ===== NIGHT SKY ===== -->
-    <div class="night-sky"></div>
+    <div class="night-sky" id="nightSky"></div>
     
     <!-- ===== STARS ===== -->
     <div class="stars" id="starsContainer"></div>
@@ -651,7 +634,7 @@
     <div class="shooting-star" style="top: 15%; left: 85%; animation-delay: 14s; animation-duration: 3.8s;"></div>
 
     <!-- ===== VERSION TEXT ===== -->
-    <div class="version-text">Court's Base11 v1.0.0.28</div>
+    <div class="version-text">Court's Base11 Engine v1.0.1.25</div>
 
     <!-- ===== CONTENT ===== -->
     <div class="content-wrapper">
@@ -666,24 +649,18 @@
         </div>
     </div>
 
-    <!-- ===== TITLE OVERLAY (BLACK GRADIENT) ===== -->
+    <!-- ===== TITLE OVERLAY ===== -->
     <div class="title-overlay" id="titleOverlay">
+        <img src="molly.png" alt="Molly" class="molly-bg" id="mollyBg">
         <div class="title-content">
             <h1>MOLLY'S</h1>
             
-            <a href="https://t.me/soabiker" target="_blank" class="telegram-btn" id="telegramBtn">
+            <a href="https://t.me/soabiker" target="_blank" class="music-btn" id="musicBtn">
                 <svg viewBox="0 0 24 24">
                     <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
                 </svg>
                 <span>Music Channel</span>
             </a>
-
-            <div class="coin-section-title">
-                <div class="coin-counter-title">🪙 <span id="coinCountTitle">0</span></div>
-                <div class="coin-wrapper-title" id="coinWrapperTitle">
-                    <img src="molly.png" alt="Molly Coin" id="coinImageTitle">
-                </div>
-            </div>
         </div>
     </div>
 
@@ -727,73 +704,11 @@
 
         createStars();
 
-        // ===== COIN SYSTEM =====
-        let coinCount = parseInt(localStorage.getItem('mollyCoins')) || 0;
-        document.getElementById('coinCountTitle').textContent = coinCount;
-
-        const coinWrapperTitle = document.getElementById('coinWrapperTitle');
-        const coinImageTitle = document.getElementById('coinImageTitle');
-
-        function updateCoinDisplay() {
-            document.getElementById('coinCountTitle').textContent = coinCount;
-            localStorage.setItem('mollyCoins', coinCount);
-        }
-
-        coinWrapperTitle.addEventListener('click', function(e) {
-            // Increment coin
-            coinCount++;
-            updateCoinDisplay();
-
-            // Click effect
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX || rect.left + rect.width / 2;
-            const y = e.clientY || rect.top + rect.height / 2;
-            
-            const effect = document.createElement('div');
-            effect.className = 'coin-click-effect';
-            effect.textContent = '+1 🪙';
-            effect.style.left = x + 'px';
-            effect.style.top = y + 'px';
-            document.body.appendChild(effect);
-            
-            setTimeout(() => {
-                effect.remove();
-            }, 1000);
-
-            // Haptic feedback
-            if (navigator.vibrate) {
-                navigator.vibrate(10);
-            }
-
-            // Rotate animation
-            this.style.transform = 'scale(0.85) rotate(-15deg)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 200);
-        });
-
-        // Magnetic turn on hover for coin
-        coinWrapperTitle.addEventListener('mousemove', function(e) {
-            const rect = this.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const deltaX = (e.clientX - centerX) / rect.width;
-            const deltaY = (e.clientY - centerY) / rect.height;
-            
-            const rotateX = -deltaY * 15;
-            const rotateY = deltaX * 15;
-            
-            this.style.transform = `perspective(500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
-        });
-
-        coinWrapperTitle.addEventListener('mouseleave', function() {
-            this.style.transform = '';
-        });
-
         // ===== VIDEO CONTROLS =====
         const video = document.getElementById('mainVideo');
         const titleOverlay = document.getElementById('titleOverlay');
         const videoWrapper = document.getElementById('videoWrapper');
+        const nightSky = document.getElementById('nightSky');
 
         video.addEventListener('loadeddata', function() {
             console.log('✅ Video loaded! Duration:', video.duration, 'seconds');
@@ -811,13 +726,14 @@
         function showTitle() {
             titleOverlay.classList.add('show');
             videoWrapper.classList.remove('magnet');
-            // Update coin display when showing title
-            document.getElementById('coinCountTitle').textContent = coinCount;
+            // Fade night sky slightly
+            nightSky.style.opacity = '0.3';
         }
 
         function hideTitle() {
             titleOverlay.classList.remove('show');
             videoWrapper.classList.add('magnet');
+            nightSky.style.opacity = '1';
         }
 
         function replayVideo() {
@@ -834,25 +750,21 @@
             }
         });
 
-        // ===== SKIP WITH 'N' KEY (FIXED) =====
+        // ===== SKIP WITH 'N' KEY =====
         document.addEventListener('keydown', function(e) {
-            // Skip to title with N key - WORKS ANYTIME
             if ((e.key === 'n' || e.key === 'N')) {
                 if (!titleOverlay.classList.contains('show')) {
-                    // Only skip if video is playing or paused (not already on title)
                     video.pause();
                     showTitle();
                     e.preventDefault();
                 }
             }
             
-            // Space to play/pause (only when video is visible)
             if (e.key === ' ' && !titleOverlay.classList.contains('show')) {
                 e.preventDefault();
                 video.paused ? video.play() : video.pause();
             }
             
-            // Escape to replay (only when title is showing)
             if (e.key === 'Escape' && titleOverlay.classList.contains('show')) {
                 replayVideo();
                 e.preventDefault();
@@ -926,15 +838,14 @@
         window.addEventListener('resize', handleResize);
         handleResize();
 
-        // ===== TELEGRAM BUTTON CLICK TRACKING =====
-        document.getElementById('telegramBtn').addEventListener('click', function(e) {
+        // ===== TELEGRAM BUTTON =====
+        document.getElementById('musicBtn').addEventListener('click', function(e) {
             console.log('🚀 Opening Telegram channel...');
         });
 
         console.log('🌙 Night sky loaded with', document.querySelectorAll('.star').length, 'stars');
-        console.log('🪙 Coin system loaded. Current coins:', coinCount);
         console.log('📱 Press N to skip to Molly\'s title');
-        console.log('📺 Version: Court\'s Base11 v1.0.0.28');
+        console.log('📺 Version: Court\'s Base11 Engine v1.0.1.25');
     </script>
 </body>
 </html>
