@@ -1,0 +1,8 @@
+{
+  "name": "court-library",
+  "version": "0.1.0",
+  "description": "Court's Library — punk PS2 AI game maker",
+  "botpress": {
+    "endpoint": "SET_IN_BROWSER"
+  }
+}
